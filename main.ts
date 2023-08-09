@@ -101,6 +101,7 @@ mySprite,
 100,
 true
 )
+music.setVolume(60)
 controller.moveSprite(mySprite, 100, 0)
 mySprite.setFlag(SpriteFlag.StayInScreen, true)
 scene.setBackgroundColor(4)
@@ -182,18 +183,23 @@ game.onUpdateInterval(500, function () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Coal, function(sprite: Sprite, otherSprite: Sprite) {
     info.changeScoreBy(1)
     otherSprite.destroy()
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Iron, function (sprite: Sprite, otherSprite: Sprite) {
     info.changeScoreBy(3)
     otherSprite.destroy()
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
 })
+
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Gold, function (sprite: Sprite, otherSprite: Sprite) {
     info.changeScoreBy(5)
     otherSprite.destroy()
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Diamond, function (sprite: Sprite, otherSprite: Sprite) {
     info.changeScoreBy(10)
     otherSprite.destroy()
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite: Sprite, otherSprite: Sprite) {
     info.changeLifeBy(-1)
@@ -206,4 +212,4 @@ info.onLifeZero(() => {
     info.saveHighScore();
     game.gameOver(false);
 })
-game.showLongText("Collect the ores and avoid bombs!", DialogLayout.Bottom)
+game.showLongText("Use arrow keys and collect the ores while avoiding bombs!", DialogLayout.Bottom)
