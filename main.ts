@@ -118,7 +118,7 @@ game.onUpdateInterval(2000, function () {
     bobb.setPosition(Math.randomRange(0, 160), 0)
     bobb.setKind(SpriteKind.Diamond)
 })
-game.onUpdateInterval(800, function () {
+game.onUpdateInterval(700, function () {
     bob = sprites.createProjectileFromSide(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
