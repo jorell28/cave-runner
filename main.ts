@@ -1,14 +1,45 @@
-let score = 0
-info.setLife(5)
-info.highScore()
 namespace SpriteKind {
     export const Gold = SpriteKind.create()
     export const Coal = SpriteKind.create()
     export const Iron = SpriteKind.create()
     export const Diamond = SpriteKind.create()
 }
-let bob: Sprite = null
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Iron, function (sprite, otherSprite) {
+    info.changeScoreBy(3)
+    otherSprite.destroy()
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Coal, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
+    otherSprite.destroy()
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Diamond, function (sprite, otherSprite) {
+    info.changeScoreBy(10)
+    otherSprite.destroy()
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
+})
+info.onLifeZero(function () {
+    game.setGameOverMessage(false, `${info.highScore() < info.score() ? 'New Highscore: ' + info.score() : "Highscore: " + info.highScore()}`)
+    info.saveAllScores();
+info.saveHighScore();
+game.gameOver(false)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Gold, function (sprite, otherSprite) {
+    info.changeScoreBy(5)
+    otherSprite.destroy()
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    otherSprite.destroy(effects.disintegrate)
+    music.play(music.melodyPlayable(music.zapped), music.PlaybackMode.UntilDone)
+})
 let bobb: Sprite = null
+let bob: Sprite = null
+let score = 0
+info.setLife(5)
+info.highScore()
 let mySprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . f f f f . . . . . . . 
@@ -101,10 +132,33 @@ mySprite,
 100,
 true
 )
-music.setVolume(60)
+music.setVolume(218)
 controller.moveSprite(mySprite, 100, 0)
 mySprite.setFlag(SpriteFlag.StayInScreen, true)
 scene.setBackgroundColor(4)
+game.showLongText("Use arrow keys and collect the ores while avoiding bombs!", DialogLayout.Bottom)
+game.onUpdateInterval(700, function () {
+    bob = sprites.createProjectileFromSide(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . d . . . . . . 
+        . . . . . . . . d d . . . . . . 
+        . . . . . . . . d . . . . . . . 
+        . . . . . . f f e e e . . . . . 
+        . . . . . . f f e e e . . . . . 
+        . . . . . . f f e e e . . . . . 
+        . . . . . . f f f f f . . . . . 
+        . . . . . . f f f f f . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, 0, 70)
+    bob.setPosition(Math.randomRange(0, 160), 0)
+    bob.setKind(SpriteKind.Enemy)
+})
 game.onUpdateInterval(2000, function () {
     bobb = sprites.createProjectileFromSide(img`
         9 9 e 9 e e e 
@@ -117,28 +171,6 @@ game.onUpdateInterval(2000, function () {
         `, 0, 70)
     bobb.setPosition(Math.randomRange(0, 160), 0)
     bobb.setKind(SpriteKind.Diamond)
-})
-game.onUpdateInterval(700, function () {
-    bob = sprites.createProjectileFromSide(img`
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . d . . . . . .
-        . . . . . . . . d d . . . . . .
-        . . . . . . . . d . . . . . . .
-        . . . . . . f f e e e . . . . .
-        . . . . . . f f e e e . . . . .
-        . . . . . . f f e e e . . . . .
-        . . . . . . f f f f f . . . . .
-        . . . . . . f f f f f . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-    `, 0, 70)
-    bob.setPosition(Math.randomRange(0, 160), 0)
-    bob.setKind(SpriteKind.Enemy)
 })
 game.onUpdateInterval(800, function () {
     bobb = sprites.createProjectileFromSide(img`
@@ -168,48 +200,14 @@ game.onUpdateInterval(400, function () {
 })
 game.onUpdateInterval(500, function () {
     bobb = sprites.createProjectileFromSide(img`
-        1 1 e 1 e e e
-        e 1 e e e 1 1
-        e e e e 1 e e
-        1 1 e e e e 1
-        e e e 1 e e e
-        e 1 e e e 1 e
-        e 1 e e 1 1 e
-    `, 0, 70)
+        1 1 e 1 e e e 
+        e 1 e e e 1 1 
+        e e e e 1 e e 
+        1 1 e e e e 1 
+        e e e 1 e e e 
+        e 1 e e e 1 e 
+        e 1 e e 1 1 e 
+        `, 0, 70)
     bobb.setPosition(Math.randomRange(0, 160), 0)
     bobb.setKind(SpriteKind.Iron)
 })
-
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Coal, function(sprite: Sprite, otherSprite: Sprite) {
-    info.changeScoreBy(1)
-    otherSprite.destroy()
-    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Iron, function (sprite: Sprite, otherSprite: Sprite) {
-    info.changeScoreBy(3)
-    otherSprite.destroy()
-    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
-})
-
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Gold, function (sprite: Sprite, otherSprite: Sprite) {
-    info.changeScoreBy(5)
-    otherSprite.destroy()
-    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Diamond, function (sprite: Sprite, otherSprite: Sprite) {
-    info.changeScoreBy(10)
-    otherSprite.destroy()
-    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite: Sprite, otherSprite: Sprite) {
-    info.changeLifeBy(-1)
-    otherSprite.destroy(effects.disintegrate)
-    music.play(music.melodyPlayable(music.zapped), music.PlaybackMode.UntilDone)
-})
-info.onLifeZero(() => {
-    game.setGameOverMessage(false, `${info.highScore() < info.score() ? 'New Highscore: ' + info.score() : "Highscore: " + info.highScore()}`)
-    info.saveAllScores();
-    info.saveHighScore();
-    game.gameOver(false);
-})
-game.showLongText("Use arrow keys and collect the ores while avoiding bombs!", DialogLayout.Bottom)
