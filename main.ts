@@ -35,6 +35,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     otherSprite.destroy(effects.disintegrate)
     music.play(music.melodyPlayable(music.zapped), music.PlaybackMode.UntilDone)
 })
+let heart: Sprite = null
 let bobb: Sprite = null
 let bob: Sprite = null
 let score = 0
@@ -210,4 +211,32 @@ game.onUpdateInterval(500, function () {
         `, 0, 70)
     bobb.setPosition(Math.randomRange(0, 160), 0)
     bobb.setKind(SpriteKind.Iron)
+})
+game.onUpdateInterval(22000, function () {
+    heart = sprites.createProjectileFromSide(img`
+        . f f . . . f f . 
+        f f 2 f . f 2 f f 
+        f 2 2 2 f 2 2 2 f 
+        f 2 2 2 2 2 2 2 f 
+        . f 2 2 2 2 2 f . 
+        . . f 2 2 2 f . . 
+        . . . f 2 f . . . 
+        . . . . f . . . . 
+        `, 0, 70)
+    bob.setPosition(Math.randomRange(0, 160), 0)
+    bob.setKind(SpriteKind.Enemy)
+})
+game.onUpdateInterval(10000, function () {
+    heart = sprites.createProjectileFromSide(img`
+        . f f . . . f f . 
+        f f e f . f 2 f f 
+        f e e 2 f 2 2 2 f 
+        f e 2 2 2 2 2 2 f 
+        . f 2 2 2 2 2 f . 
+        . . f 2 2 2 f . . 
+        . . . f 2 f . . . 
+        . . . . f . . . . 
+        `, 0, 70)
+    bob.setPosition(Math.randomRange(0, 160), 0)
+    bob.setKind(SpriteKind.Enemy)
 })
