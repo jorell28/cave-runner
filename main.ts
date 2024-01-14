@@ -144,7 +144,7 @@ controller.moveSprite(mySprite, 100, 0)
 mySprite.setFlag(SpriteFlag.StayInScreen, true)
 scene.setBackgroundColor(4)
 game.showLongText("Use arrow keys and collect the ores while avoiding bombs!", DialogLayout.Bottom)
-game.onUpdateInterval(12000, function () {
+game.onUpdateInterval(11340, function () {
     Cursed_Heart = sprites.createProjectileFromSide(img`
         . f f . . . f f . 
         f f 2 f . f 2 f f 
@@ -156,7 +156,7 @@ game.onUpdateInterval(12000, function () {
         . . . . f . . . . 
         `, 0, 70)
     Cursed_Heart.setPosition(Math.randomRange(0, 160), 0)
-    bob.setKind(SpriteKind.Enemy)
+    Cursed_Heart.setKind(SpriteKind.Enemy)
 })
 game.onUpdateInterval(700, function () {
     bob = sprites.createProjectileFromSide(img`
@@ -232,7 +232,7 @@ game.onUpdateInterval(500, function () {
     bobb.setPosition(Math.randomRange(0, 160), 0)
     bobb.setKind(SpriteKind.Iron)
 })
-game.onUpdateInterval(22000, function () {
+game.onUpdateInterval(21520, function () {
     heart = sprites.createProjectileFromSide(img`
         . f f . . . f f . 
         f f 2 f . f 2 f f 
